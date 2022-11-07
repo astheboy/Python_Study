@@ -1,1 +1,1 @@
-# Python Study Code 저장소
+# 파이썬 공부 코드 
