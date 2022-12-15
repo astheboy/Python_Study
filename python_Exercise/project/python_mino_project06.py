@@ -63,7 +63,6 @@ end_of_game = False
 userlife = len(stages)-1
 startcount = len(stages)
 finalcount = len(stages)
-
 # 게임 시작 및 랜덤 단어 선택하기
 print("** 베스킨라빈스 아이스크림 행맨 게임 **")
 print("베스킨라빈스 아이스크림 이름을 추측해서 맞춰보세요.")
@@ -74,10 +73,11 @@ wordlist = ["아이스허쉬앤리세스", "핑크스푼비긴즈", "비타500�
 "레인보유샤베트", "31요커트", "체리쥬빌레" ]
 
 randomword = list(random.choice(wordlist)) # 문자열을 한 글자씩 끊어서 리스트로 바꾸기
+len_randomword = len(randomword)
 
 # 비어있는 단어 출력
 
-for i in range(len(randomword)) :
+for i in range(len_randomword) :
     blankword.append("_") 
 
 print(blankword)
@@ -92,9 +92,12 @@ while end_of_game == False :
     guessword = input("예상되는 글자를 입력해 주세요. : ")
     print("당신이 입력한 글자 : " + guessword)
     if guessword in randomword :
-      randomwordindex = list(filter(lambda x : randomword[x] == guessword, range(len(randomword)))) #list에서 value 값으로 다중 index찾기
-      for i in range(len(randomwordindex)) :
-          blankword[randomwordindex[i]] = guessword  #정답을 맞춘 글자로 바꾸기
+      for i in range(len_randomword) :
+        if randomword[i]== guessword :
+          blankword[i] = guessword
+      # randomwordindex = list(filter(lambda x : randomword[x] == guessword, range(len(randomword)))) #list에서 value 값으로 다중 index찾기
+      # for i in range(len(randomwordindex)) :
+      #     blankword[randomwordindex[i]] = guessword  #정답을 맞춘 글자로 바꾸기
       finalcount -= 1
       print("맞췄어요.")
       print(blankword)
