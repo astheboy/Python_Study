@@ -173,7 +173,7 @@ def winner_check(user_point, user_bet_point, game_card,game_index,card_list):
     return user_point
 
         
-#게임 시작과 함께 딜러는 두장의 카드를 받고 1장의 카드만 화면으로 보여주는 코드
+#게임 진행 함수
 def game_start(user_point):
     # 게임 진행 변수
     game_in_progress = True
