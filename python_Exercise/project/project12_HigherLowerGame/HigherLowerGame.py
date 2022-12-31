@@ -125,6 +125,14 @@ from game_data import data
 result_list = ["","",""]
 
 def format_print(account):
+    """data 리스트에서 추출한 딕셔너리 요소를 각각의 포멧에 맞게 출력하는 함수
+
+    Args:
+        account (dictionary): data 리스트에서 랜덤하게 추출된 딕셔너리 요소
+
+    Returns:
+        _str_: 딕셔너리 키 값을 일정하게 배열한 문자열을 출력함
+    """
     return f"{account['name']}, a {account['description']}, from {account['country']}"
 
 def follower_cacl(first, second):
