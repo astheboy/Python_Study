@@ -41,9 +41,9 @@ from game_data import data
 #             people_list.append(second_people)
 #             result_list = follower_cacl(first_people, second_people)
         
-#         print(f"첫번째 대상 A : {first_people['name']}, {first_people['description']}, from {first_people['country']}")
+#         print(f"첫번째 대상 A : {first_people['name']}, a {first_people['description']}, from {first_people['country']}")
 #         print(vs)
-#         print(f"두번째 대상 B : {second_people['name']}, {second_people['description']}, from {second_people['country']}")
+#         print(f"두번째 대상 B : {second_people['name']}, a {second_people['description']}, from {second_people['country']}")
         
 #         answer = input("어떤 대상의 팔로우가 더 많을까요? (A or B) : ").upper()
 #         answer_count += 1
@@ -61,9 +61,71 @@ from game_data import data
 # people_select(result_list, data, people_list)
 
 
-# 프로그램 2차 버전
+# # 프로그램 2차 버전
+
+# result_list = ["","",""]
+
+# def follower_cacl(first, second):
+#     # 팔로우 계산한 후 result 리스트에 결과값 넣기
+
+#     if first["follower_count"] > second["follower_count"] :
+#         result_list = [first, second, "A"]
+#     else:
+#         result_list = [second, first, "B"]
+    
+#     return result_list
+
+# def people_select(result_list, data):
+#     answer_count = 0
+    
+#     while data != [] :
+#         # 랜덤하기 두 인물을 뽑기
+#         if result_list[0] == "":
+
+#             first = data[random.randint(0, len(data))]
+#             result_list[0] = first
+#             data.remove(first)
+#             second = data[random.randint(0, len(data))]
+#             result_list[1] = second
+#             data.remove(second)
+    
+#             result_list = follower_cacl(first, second)
+            
+#         else:
+#             first = result_list[0]
+#             second = data[random.randint(0, len(data))]
+#             result_list[1] = second
+#             data.remove(second)
+
+#             result_list = follower_cacl(first, second)
+
+#         print("\n")
+#         print(f"첫번째 대상 A : {first['name']}, a {first['description']}, from {first['country']}")
+#         print(vs)
+#         print(f"두번째 대상 B : {second['name']}, a {second['description']}, from {second['country']}")
+        
+#         answer = input("어떤 대상의 팔로우가 더 많을까요? (A or B) : ").upper()
+#         answer_count += 1
+
+#         if answer == result_list[2] :
+#             print(f'맞았습니다. 당신의 현재 점수 : {answer_count}')
+#             # print(f"선택한 대상 {answer}의 팔로우 수 : {result_list[0]['follower_count']}백만")
+#         else:
+#             print(f'틀렸습니다. 당신의 점수 : {answer_count}점')
+#             print(f"{result_list[0]['name']}의 팔로우 수 : {result_list[0]['follower_count']}백만")
+#             print(f"{result_list[1]['name']}의 팔로우 수 : {result_list[1]['follower_count']}백만")
+#             return  
+
+# print(logo)
+# people_select(result_list, data)
+
+
+# 프로그램 3차 버전(유데미 강좌 코드 일부 추가)
 
 result_list = ["","",""]
+
+def format_print(account):
+    return f"{account['name']}, a {account['description']}, from {account['country']}"
 
 def follower_cacl(first, second):
     # 팔로우 계산한 후 result 리스트에 결과값 넣기
@@ -77,38 +139,28 @@ def follower_cacl(first, second):
 
 def people_select(result_list, data):
     answer_count = 0
-    
-    while data != [] :
+    second = random.choice(data)
+
+    while answer_count != len(data) :
         # 랜덤하기 두 인물을 뽑기
-        if result_list[0] == "":
+        first = second
+        second = random.choice(data)
+        while first == second :
+            second = random.choice(data)
 
-            first = data[random.randint(0, len(data))]
-            result_list[0] = first
-            data.remove(first)
-            second = data[random.randint(0, len(data))]
-            result_list[1] = second
-            data.remove(second)
-    
-            result_list = follower_cacl(first, second)
+        result_list = follower_cacl(first, second)
             
-        else:
-            first = result_list[0]
-            second = data[random.randint(0, len(data))]
-            result_list[1] = second
-            data.remove(second)
-
-            result_list = follower_cacl(first, second)
 
         print("\n")
-        print(f"첫번째 대상 A : {first['name']}, {first['description']}, from {first['country']}")
+        print(f"첫번째 대상 A : {format_print(first)}")
         print(vs)
-        print(f"두번째 대상 B : {second['name']}, {second['description']}, from {second['country']}")
+        print(f"두번째 대상 B : {format_print(second)}")
         
         answer = input("어떤 대상의 팔로우가 더 많을까요? (A or B) : ").upper()
         answer_count += 1
 
         if answer == result_list[2] :
-            print('맞았습니다.')
+            print(f'맞았습니다. 당신의 현재 점수 : {answer_count}')
             # print(f"선택한 대상 {answer}의 팔로우 수 : {result_list[0]['follower_count']}백만")
         else:
             print(f'틀렸습니다. 당신의 점수 : {answer_count}점')
@@ -118,7 +170,5 @@ def people_select(result_list, data):
 
 print(logo)
 people_select(result_list, data)
-
-
 
 
