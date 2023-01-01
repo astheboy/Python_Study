@@ -9,18 +9,19 @@ def machine_usage_method():
     2. 금액이 부족하면 다시 커피를 선택해야 합니다.
     3. 커피 머신의 물, 우유, 커피 양이 부족하면 잠시 후 다시 시도하셔야 합니다.
     4. 'report'를 입력하면 현재 커피 머신의 상태를 알 수 있습니다.
-    5. 'no'를 입력하면 커피머신을 정지합니다.
+    5. 'off'를 입력하면 커피머신을 정지합니다.
     
     '''
 # 현재 커피머신 레포트 출력(물의 양, 커피양, 우유양, 보관 된 동전 금액)
 def report_print(resources):
-    
+    global profit
+
     return f'''
     현재 커피 머신 재료 상태
-    물의 양 : {resources["water"]}g
-    우유 양 : {resources["milk"]}g
+    물의 양 : {resources["water"]}ml
+    우유 양 : {resources["milk"]}ml
     커피 양 : {resources["coffee"]}g
-    보관 현금 : {resources["save_money"]}원
+    이익 : {profit}원
     '''
 
 # 커피머신 양이 부족하면 물의 양, 우유 양, 커피 양 채우기
@@ -38,51 +39,46 @@ def check_resources(resources, resource):
 # 사용자가 원하는 커피를 만들기 위해 커피머신의 재료를 기준에 맞게 조합하고 사용한 재료의 양을 빼기
 def coffee_make(menu, select_coffee, resources):
     
-    resources["water"] = resources["water"] - menu[select_coffee]["ingredients"]["water"]
-    resources["milk"] = resources["milk"] - menu[select_coffee]["ingredients"]["milk"]
-    resources["coffee"] = resources["coffee"] - menu[select_coffee]["ingredients"]["coffee"]
+    for resource in resources :
+        resources[resource] -= menu[select_coffee]["ingredients"][resource]
 
     return resources
 
 def exchange_cacl(menu, select_coffee, sum):
     if sum >= menu[select_coffee]["cost"]:
-        
+        global profit
         coffee_make(menu, select_coffee, resources)
 
         exchange = sum - menu[select_coffee]["cost"]
         print(f"거스름돈은 {exchange}원 입니다.")
-        print(f"{select_coffee} 맛있게 드세요.")
-        resources["save_money"] += menu[select_coffee]["cost"]
-
+        print(f"{select_coffee} ☕️맛있게 드세요.")
+        profit += menu[select_coffee]["cost"]
+        return profit
     else:
         print("비용이 부족합니다.")
 
 # 코인(백원, 천원, 만원) 계산 및 프로그램 실행 함수
 def coffee_machine(menu, select_coffee, resources):
-    
-    coins = [10000, 1000, 100]
     sum = 0
+    coins = [10000, 1000, 100]
+
     for coin in coins:
         input_coin = int(input(f"{coin}원을 넣은 갯수 : "))
         sum += input_coin * coin
 
-    if menu[select_coffee]["ingredients"]["water"] > resources["water"] :
-        check_resources(resources, "water")
-        print(f"거스름돈은 {sum}원 입니다.")
-    elif menu[select_coffee]["ingredients"]["milk"] > resources["milk"] :
-        check_resources(resources, "milk")
-        print(f"거스름돈은 {sum}원 입니다.")
-    elif menu[select_coffee]["ingredients"]["coffee"] > resources["coffee"] :
-        check_resources(resources, "coffee")
-        print(f"거스름돈은 {sum}원 입니다.")
-    else:
-        exchange_cacl(menu, select_coffee, sum)
+    for resource in resources :
+        if menu[select_coffee]["ingredients"][resource] > resources[resource] :
+            check_resources(resources, resource)
+            return print(f"거스름돈은 {sum}원 입니다.")
+
+    exchange_cacl(menu, select_coffee, sum)
 
     return resources
 
 
 # 사용자로부터 먹고 싶은 커피 입력받기
 machine_on = True
+profit = 0
 
 print(machine_usage_method())
 
@@ -92,7 +88,7 @@ while machine_on :
     if select_coffee == "report" :
         print(report_print(resources))
 
-    elif select_coffee == "no" :
+    elif select_coffee == "off" :
         machine_on = False
     
     else:
