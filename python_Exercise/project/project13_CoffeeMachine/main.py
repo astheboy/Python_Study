@@ -97,5 +97,3 @@ while machine_on :
     
     else:
         coffee_machine(menu, select_coffee, resources)
-
-    
