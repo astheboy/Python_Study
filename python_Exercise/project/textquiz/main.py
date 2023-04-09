@@ -3,18 +3,24 @@ import random
 import os
 import json
 
-openai.api_key = "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"
+openai.api_key = "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"
 
 # 텍스트 문서에서 주제를 추출하는 함수
 
 
 def extract_keywords_from_file(file):
     current_dir = os.path.abspath(os.path.dirname(__file__))
-    file_path = os.path.join(current_dir, "topics.txt")
+    file_path = os.path.join(current_dir, file)
     with open(file_path, "r") as f:
         text = f.read()
     keywords = text.strip().split(",")
     return [keyword.strip() for keyword in keywords]
+
+# def extract_keywords_from_file(file):
+#     with open(file, "r") as f:
+#         text = f.read()
+#     keywords = text.strip().split(",")
+#     return [keyword.strip() for keyword in keywords]
 
 # 텍스트 생성 함수
 
