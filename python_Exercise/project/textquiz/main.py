@@ -1,8 +1,9 @@
 import openai
 import random
 import os
+import json
 
-openai.api_key = "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"
+openai.api_key = "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"
 
 # 텍스트 문서에서 주제를 추출하는 함수
 
@@ -74,11 +75,14 @@ while True:
     else:
         keyword = input("당신이 생성하고 싶은 글에 들어갈 단어나 키워드를 입력해 주세요. : ")
     article = generate_text(keyword)
+    article_json = json.dumps(article)
     summary_ai = summarize_text(article)
     print("생성 된 글:")
     print(article)
     summary = input("글을 보고 중심문장을 찾아봅시다. : ")
-    validation_prompt = f"Would you say the following sentence is at least 50% of the way to being a key sentence in your article? If yes, please say yes or no. Sentence: '{summary}' Article: '{article}'"
+    # validation_prompt = f"Would you say the following sentence is at least 50% of the way to being a key sentence in your article? If yes, please say yes or no. Sentence: '{summary}' Article: '{article}'"
+    summary_json = json.dumps(summary)
+    validation_prompt = f"Would you say the following sentence is at least 50% of the way to being a key sentence in your article? If yes, please say yes or no. Sentence: '{summary_json}' Article: '{article_json}'"
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=validation_prompt,
