@@ -2,8 +2,10 @@ import openai
 import random
 import os
 import json
+from dotenv import load_dotenv
+load_dotenv()
 
-openai.api_key = "api-key"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # 텍스트 문서에서 주제를 추출하는 함수
 
@@ -16,11 +18,6 @@ def extract_keywords_from_file(file):
     keywords = text.strip().split(",")
     return [keyword.strip() for keyword in keywords]
 
-# def extract_keywords_from_file(file):
-#     with open(file, "r") as f:
-#         text = f.read()
-#     keywords = text.strip().split(",")
-#     return [keyword.strip() for keyword in keywords]
 
 # 텍스트 생성 함수
 
@@ -38,19 +35,6 @@ def generate_text(keyword):
     )
     article = response.choices[0].text.strip()
 
-    # prompt = f"생성한 글에서 올바른 중심 문장 1개와 잘못된 중심문장 3개를 만들어 사지선다형 퀴즈로 제시해 주세요. "
-    # response = openai.Completion.create(
-    #     engine="text-davinci-003",
-    #     prompt=prompt,
-    #     temperature=0.5,
-    #     max_tokens=1000,
-    #     n=1,
-    #     stop=None,
-    #     timeout=10,
-    # )
-    # question = response.choices[0].text.strip()
-
-    # result = article + question
     return article
 
 # 생성한 글의 중심 문장을 ai가 찾는 함수
@@ -59,7 +43,7 @@ def generate_text(keyword):
 def summarize_text(text):
     prompt = f"Find the center sentence of the following text.: '{text}'"
     response = openai.Completion.create(
-        engine="text-summary-003",
+        engine="text-davinci-003",
         prompt=prompt,
         temperature=0.5,
         max_tokens=200,
@@ -72,6 +56,8 @@ def summarize_text(text):
 
 
 # 사용자와 상호작용하는 함수
+
+
 while True:
     file = "topics.txt"
     topic_select = input("자동으로 무작위 주제의 글을 만들겠습니까?(Y/N)")
@@ -85,10 +71,9 @@ while True:
     summary_ai = summarize_text(article)
     print("생성 된 글:")
     print(article)
-    summary = input("글을 보고 중심문장을 찾아봅시다. : ")
-    # validation_prompt = f"Would you say the following sentence is at least 50% of the way to being a key sentence in your article? If yes, please say yes or no. Sentence: '{summary}' Article: '{article}'"
+    summary = input("글을 보고 중심문장을 찾아 적어봅시다. : ")
     summary_json = json.dumps(summary)
-    validation_prompt = f"Would you say the following sentence is at least 50% of the way to being a key sentence in your article? If yes, please say yes or no. Sentence: '{summary_json}' Article: '{article_json}'"
+    validation_prompt = f"Give a numerical value for the probability that the next sentence written is the key sentence in the given article, in your opinion. Sentence: '{summary_json}' Article: '{article_json}'"
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=validation_prompt,
@@ -98,12 +83,9 @@ while True:
         stop=None,
         timeout=10,
     )
+    aisummary = response.choices[0].text.strip()
 
-    if response.choices[0].text.strip() == "Yes":
-        print("중심문장을 잘 찾았습니다.")
-    else:
-        print("중심문장을 다시 찾아보면 좋겠습니다.")
-
+    print("잘하셨습니다. 중심문장을 찾아내는 능력을 평가해 보겠습니다.")
     print("내가 생각한 중심문장은 다음과 같습니다.")
     print(summary_ai)
     another_article = input("다른 글을 생성하여 다시 중심 문장을 찾아보겠습니까? (Y/N)")

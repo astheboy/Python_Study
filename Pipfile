@@ -9,6 +9,7 @@ pyvibe = "*"
 django = "*"
 openai = "*"
 flask = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
