@@ -3,7 +3,7 @@ import random
 import os
 import json
 
-openai.api_key = "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"
+openai.api_key = "api-key"
 
 # 텍스트 문서에서 주제를 추출하는 함수
 
@@ -59,7 +59,7 @@ def generate_text(keyword):
 def summarize_text(text):
     prompt = f"Find the center sentence of the following text.: '{text}'"
     response = openai.Completion.create(
-        engine="text-davinci-003",
+        engine="text-summary-003",
         prompt=prompt,
         temperature=0.5,
         max_tokens=200,
