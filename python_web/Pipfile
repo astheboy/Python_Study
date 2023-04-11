@@ -4,11 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-"colorgram.py" = "*"
-pyvibe = "*"
-django = "*"
 openai = "*"
-flask = "*"
+django = "*"
 python-dotenv = "*"
 
 [dev-packages]
