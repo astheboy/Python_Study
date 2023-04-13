@@ -3,9 +3,11 @@ import random
 import os
 import json
 from dotenv import load_dotenv
+
 load_dotenv()
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 # 텍스트 문서에서 주제를 추출하는 함수
 
@@ -36,8 +38,6 @@ def generate_text(keyword):
     article = response.choices[0].text.strip()
 
     return article
-
-# 생성한 글의 중심 문장을 ai가 찾는 함수
 
 
 def summarize_text(text):
