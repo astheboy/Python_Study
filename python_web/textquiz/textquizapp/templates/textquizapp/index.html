@@ -36,18 +36,6 @@
             위의 주제 목록 중 1개를 선택하면 ChatGPT에서 주제와 관련된 짧은 글을
             아래에 생성합니다.
           </p>
-          <table class="ai_text">
-            <tr>
-              <td>
-                <h6>
-                  [여기에 주제 목록에서 선택한 주제로 생성한 문단이 출력됩니다.]
-                </h6>
-              </td>
-            </tr>
-            <tr>
-              <td>{{ article | safe}}</td>
-            </tr>
-          </table>
         </div>
       </div>
     </div>
@@ -62,20 +50,51 @@
             관련된 짧은 글을 생성합니다.
           </p>
           <p class="card-text">
-            단어와 주제는 여러 개를 넣을 수 있습니다. 예) 학교, 코로나, 건강
+            단어와 주제는 여러 개를 넣을 수 있습니다. (예) 학교, 코로나, 건강
           </p>
 
-          <form method="post" action="submit_message/">
+          <form method="post" action="../creat/">
             {% csrf_token %}
             <textarea class="form-control" rows="2" name="comment"></textarea>
             <p></p>
             <button type="submit" class="btn btn-primary">제출</button>
           </form>
-          <table class="user_keyword">
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="card m-4">
+        <div class="card-body">
+          <h3 class="sub-card-title">ChatGPT로 생성한 짧은 문단글</h3>
+          <p></p>
+          <table class="ai_text">
             <tr>
               <td>
-                <p>{{ context.article }}</p>
+                <h6>
+                  [여기에 주제 목록에서 선택한 주제로 생성한 문단이 출력됩니다.]
+                </h6>
               </td>
+            </tr>
+            <tr>
+              <td>{{ article | safe}}</td>
+            </tr>
+          </table>
+          <table class="word_in_text">
+            <tr>
+              <td>
+                <h6>[생성한 글의 주요 단어]</h6>
+              </td>
+            </tr>
+            <tr>
+              <td>{{ word | safe}}</td>
+            </tr>
+            <tr>
+              <td>
+                <h6>[주요 단어의 낱말 풀이]</h6>
+              </td>
+            </tr>
+            <tr>
+              <td>{{ meaning | safe}}</td>
             </tr>
           </table>
         </div>
