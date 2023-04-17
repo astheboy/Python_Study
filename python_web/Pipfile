@@ -8,6 +8,7 @@ openai = "*"
 django = "*"
 python-dotenv = "*"
 beautifulsoup4 = "*"
+gunicorn = "*"
 
 [dev-packages]
 
