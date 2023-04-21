@@ -24,7 +24,7 @@ def extract_keywords_from_file(file):
     keywords = text.strip().split(",")
     selecttext = ''
     for keyword in keywords:
-        selecttext += f'<a href="../creat/{keyword.strip()}">{keyword.strip()}</a> | '
+        selecttext += f'<a href="../create/{keyword.strip()}">{keyword.strip()}</a> | '
     return selecttext
 
 # 글에서 주요 단어을 chatgpt에 물어 리스트로 추출하는 함수
@@ -46,20 +46,6 @@ def word_of_text(text):
     # words를 ,로 나누어서 리스트로 만들기
     words = words.split(',')
     return words
-
-# 각 단어의 국어 사전 검색 결과를 가져오는 함수
-
-
-def get_word_meaning(word):
-
-    url = f"https://ko.dict.naver.com/search.nhn?sLn=kr&searchOption=all&query={word}"
-    response = requests.get(url, timeout=10)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    if soup.select_one('span.txt_box') is not None:
-        meaning = soup.select_one('span.txt_box').text
-    else:
-        meaning = '뜻을 찾을 수 없습니다.'
-    return meaning
 
 # 생성한 텍스트에서 중심 문장을 추출하는 함수
 
@@ -111,12 +97,20 @@ def index(request):
     return render(request, 'textquizapp/index.html', {'selecttext': selecttext, 'article': article})
 
 
-def word(request, word=None):
-    meaning = get_word_meaning(word)
-    return render(request, 'textquizapp/word.html', {'word': word, 'meaning': meaning})
+def get_word_meaning(request, word=None):
+    url = f'https://krdict.korean.go.kr/api/search?key=9909E04870761033EC73F940D86C0382&q={word}&advanced=y&method=exact&translated=y&trans_lang=1'
+    xml_data = requests.get(url, timeout=5, verify=False).text
+    soup = BeautifulSoup(xml_data, "html.parser")
+    definition_list = [definition.get_text()
+                       for definition in soup.find_all('definition')]
+    meaning = ''
+    for i, definition in enumerate(definition_list):
+        definition_list[i] = definition.replace('<b>', '').replace('</b>', '')
+        meaning += f'{i+1}. {definition_list[i]}<br>'
+    return render(request, 'textquizapp/index.html', {'word': word, 'meaning': meaning})
 
 
-def creat(request, keyword=None):
+def create(request, keyword=None):
     selecttext = extract_keywords_from_file(file)
     context = {'article': '', 'summary': ''}
     if keyword:
@@ -137,6 +131,10 @@ def creat(request, keyword=None):
                     keyword = text
                     context['article'] = response['article']
                     context['summary'] = response['summary']
+    # if word:
+    #     result = get_word_meaning(word)
+    # else:
+    #     result = ''
 
     ai_text = context['article']
     word_in_text = word_of_text(ai_text)
@@ -144,6 +142,6 @@ def creat(request, keyword=None):
     for word in word_in_text:
         link = f'<a href="../word/{word.strip()}">{word.strip()}</a>'
         wordlinks.append(link)
-    result = ', '.join(wordlinks)
+    word_link = ', '.join(wordlinks)
     article = f'<h5>[{keyword}]로 생성한 짧은 글</h5><p>{ai_text}</p>'
-    return render(request, 'textquizapp/index.html', {'selecttext': selecttext, 'article': article, 'word_in_text': word_in_text, 'word': result})
+    return render(request, 'textquizapp/index.html', {'selecttext': selecttext, 'article': article, 'word_in_text': word_in_text, 'word_link': word_link})

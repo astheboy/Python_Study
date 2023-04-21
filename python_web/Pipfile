@@ -7,8 +7,8 @@ name = "pypi"
 openai = "*"
 django = "*"
 python-dotenv = "*"
-beautifulsoup4 = "*"
 gunicorn = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]
 

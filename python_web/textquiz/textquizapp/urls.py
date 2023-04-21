@@ -4,8 +4,8 @@ from textquizapp import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('creat/<str:keyword>', views.creat, name='creat'),
-    path('creat/creat/', views.creat, name='creat'),
-    path('creat/', views.creat, name='creat'),
-    path('word/<str:word>', views.word, name='word'),
+    path('create/<str:keyword>', views.create, name='create'),
+    path('create/create/', views.create, name='create'),
+    path('create/', views.create, name='create'),
+    path('word/<str:word>', views.get_word_meaning, name='word'),
 ]
