@@ -1,0 +1,10 @@
+{% extends 'base.html' %} {% block content %}
+<h1>메모 목록</h1>
+<ul>
+  {% for memo in memos %}
+  <li><a href="{% url 'memo_detail' memo.id %}">{{ memo.title }}</a></li>
+  {% empty %}
+  <li>메모가 없습니다.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

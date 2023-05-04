@@ -110,7 +110,7 @@ def get_word_meaning(request, word=None):
     return render(request, 'textquizapp/index.html', {'word': word, 'meaning': meaning})
 
 
-def create(request, keyword=None):
+def create(request, keyword=None, word=None):
     selecttext = extract_keywords_from_file(file)
     context = {'article': '', 'summary': ''}
     if keyword:
@@ -131,10 +131,10 @@ def create(request, keyword=None):
                     keyword = text
                     context['article'] = response['article']
                     context['summary'] = response['summary']
-    # if word:
-    #     result = get_word_meaning(word)
-    # else:
-    #     result = ''
+    if word:
+        result = get_word_meaning(word)
+    else:
+        result = ''
 
     ai_text = context['article']
     word_in_text = word_of_text(ai_text)
@@ -144,4 +144,4 @@ def create(request, keyword=None):
         wordlinks.append(link)
     word_link = ', '.join(wordlinks)
     article = f'<h5>[{keyword}]로 생성한 짧은 글</h5><p>{ai_text}</p>'
-    return render(request, 'textquizapp/index.html', {'selecttext': selecttext, 'article': article, 'word_in_text': word_in_text, 'word_link': word_link})
+    return render(request, 'textquizapp/index.html', {'selecttext': selecttext, 'article': article, 'word_in_text': word_in_text, 'word_link': word_link, 'meaning': result})
