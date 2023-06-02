@@ -39,6 +39,13 @@ while game_is_on:
         game_is_on = False
         print("Game Over")
         score.game_over()
+        
+    for snake_body in snake.all_snakes[1:]:
+        if snake.all_snakes[0].distance(snake_body) < 10:
+            game_is_on = False
+            print("Game Over")
+            score.game_over()
+            
     if (
         snake.all_snakes[0].distance(food) < 15
     ):  # 뱀의 머리와 음식의 거리를 확인하여 충돌 여부를 검사합니다.

@@ -12,6 +12,7 @@ class Snake:
         self.all_snakes = []
         self.snake_positions = []
         self.start_snake()
+        self.trace_move()
       
             
     def start_snake(self):
@@ -29,7 +30,7 @@ class Snake:
         snake_tail.color("white")
         snake_tail.penup()
         snake_tail.pensize(20)
-        snake_tail.goto(self.all_snakes[len(self.all_snakes) - 1].pos())
+        snake_tail.goto(self.all_snakes[-1].pos())
         self.all_snakes.append(snake_tail)
 
 
